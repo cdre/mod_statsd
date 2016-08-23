@@ -158,6 +158,10 @@ static int request_hook(request_rec *r)
 {   settings_rec *cfg = ap_get_module_config( r->per_dir_config,
                                               &statsd_module );
 
+    if ( r->status < 200 || r->status > 299) {
+        return DECLINED;
+    }
+
     /* Do not run in subrequests: we get the context of the sub requests
      * via r->next, rather than running it each time.
      * Don't run if not enabled. */
